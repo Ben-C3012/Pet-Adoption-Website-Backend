@@ -1,7 +1,7 @@
 const fs = require('fs')
 const express = require('express')
 const app = express()
-const port = 8080
+
 const petRouter = require('./routes/petRoutes')
 const userRouter = require('./routes/userRoutes')
 
@@ -27,7 +27,4 @@ app.use('/api/v1/pets', petRouter)
 app.use('/api/v1/users', userRouter)
 
 
-
-app.listen(port, () => {
-    console.log('App Running On Port ' + port)
-})
+module.exports = app
