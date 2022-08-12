@@ -2,6 +2,7 @@ const Ajv = require("ajv")
 const ajv = new Ajv()
 
 
+
 function validateBody(petSchema) {
     return (req, res, next) => {
         const data = req.body

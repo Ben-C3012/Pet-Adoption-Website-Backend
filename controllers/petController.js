@@ -3,6 +3,17 @@ const fs = require('fs')
 
 const pets = JSON.parse(fs.readFileSync('./dev-data/pets.json'))
 
+ exports.checkID = ((req, res, next, val) => {
+    console.log(`pet id is ${val} 🐶`)
+    if (val > pets.length) {
+        return res.status(404).json({
+            status: 'fail',
+            messgae: 'Invalid Id'
+        })
+    }
+    next()
+})
+
 exports.getAllPets = (req, res) => {
     console.log(req.requestTime)
     res.status(200).json({
@@ -35,13 +46,6 @@ exports.editPet = (req, res) => {
     const id = req.params.id * 1;
     const pet = pets.find(pet => pet.id === id);
 
-    if (!pet) {
-        return res.status(404).send({
-            status: 'fail',
-            message: 'Invalid ID'
-        });
-    }
-
     const updatedPet = { ...pet, ...req.body };
     const updatedPets = pets.map(pet =>
         pet.id === updatedPet.id ? updatedPet : pet
@@ -62,13 +66,6 @@ exports.editPet = (req, res) => {
 exports.getPet = (req, res) => {
 
     const id = req.params.id * 1
-    if (id > pets.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'invalid ID'
-        })
-    }
-
     const pet = pets.find(pet => pet.id === id)
 
     res.status(200).json({
@@ -82,13 +79,6 @@ exports.getPet = (req, res) => {
 exports.deletePet = (req, res) => {
     const id = req.params.id * 1
     const pet = pets.find(pet => pet.id === id)
-
-    if (!pet) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'invalid ID'
-        })
-    }
 
     const updatedPets = pets.filter(pet => pet.id !== id)
     fs.writeFile(`${__dirname}/dev-data/pets.json`, JSON.stringify(updatedPets), err => {
