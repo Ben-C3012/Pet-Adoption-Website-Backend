@@ -1,0 +1,72 @@
+[
+    {
+        "id": 0,
+        "type": "dog",
+        "name": "Atlas",
+        "adoption status": "fostered",
+        "picture": "URL",
+        "height": 60,
+        "weight": 23,
+        "color": "Brown",
+        "bio": "A Cute dog",
+        "hypoallergenic": false,
+        "dietary restrictions": false,
+        "breed": "Beagle"
+    },
+    {
+        "id": 1,
+        "type": "dog",
+        "name": "Carter",
+        "adoption status": "available",
+        "picture": "URL",
+        "height": 40,
+        "weight": 12,
+        "color": "black",
+        "bio": "A Cute dog named carter",
+        "hypoallergenic": false,
+        "dietary restrictions": false,
+        "breed": "Shiba Inu"
+    },
+    {
+        "id": 2,
+        "type": "",
+        "name": "Byron",
+        "adoption status": 25,
+        "picture": "URL",
+        "height": 23,
+        "weight": 4.7,
+        "color": 37,
+        "bio": 397,
+        "hypoallergenic": "Breathtaking hike through the Canadian Banff National Park",
+        "dietary restrictions": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "breed": "bulldog"
+    },
+    {
+        "id": 3,
+        "type": "",
+        "name": "Bernard",
+        "adoption status": "fostered",
+        "picture": "URL",
+        "height": 42,
+        "weight": 4.7,
+        "color": 37,
+        "bio": 397,
+        "hypoallergenic": "Breathtaking hike through the Canadian Banff National Park",
+        "dietary restrictions": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "breed": "tour-1-cover.jpg"
+    },
+    {
+        "id": 4,
+        "type": "Dog",
+        "name": "Hello World",
+        "adoption status": "available",
+        "picture": "URL",
+        "height": 50,
+        "weight": 4.7,
+        "color": 37,
+        "bio": 397,
+        "hypoallergenic": "Breathtaking hike through the Canadian Banff National Park",
+        "dietary restrictions": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.\nLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+        "breed": "tour-1-cover.jpg"
+    }
+]
