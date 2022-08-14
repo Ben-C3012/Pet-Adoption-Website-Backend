@@ -1,7 +1,5 @@
 const Pet = require('../models/petModel')
 
-
-
 exports.getAllPets = async (req, res) => {
 
     try {
@@ -41,8 +39,26 @@ exports.createNewPet = async (req, res) => {
     }
 }
 
-exports.editPet = (req, res) => {
+exports.editPet = async (req, res) => {
+    try {
+        const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        })
 
+        res.status(200).json({
+            status: 'success',
+            data: {
+                pet
+            }
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        })
+    }
 
 }
 
@@ -65,6 +81,22 @@ exports.getPet = async (req, res) => {
 
 }
 
-exports.deletePet = (req, res) => {
+exports.deletePet = async (req, res) => {
+    try {
+        const pet = await Pet.findByIdAndDelete(req.params.id)
 
+        res.status(200).json({
+            status: 'success',
+            message : "Pet Successfully Deleted",
+            data: {
+                pet
+            }
+        })
+
+    } catch (err) {
+        res.status(400).json({
+            status: 'fail',
+            message: err
+        })
+    }
 }
