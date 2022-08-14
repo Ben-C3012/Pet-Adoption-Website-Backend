@@ -1,8 +1,9 @@
 const Pet = require('../models/petModel')
+const catchAsync = require('../utils/catchAsync')
 
-exports.getAllPets = async (req, res) => {
 
-    try {
+exports.getAllPets = catchAsync(async (req, res , next) => {
+
         const pets = await Pet.find()
 
         res.status(200).json({
@@ -12,91 +13,60 @@ exports.getAllPets = async (req, res) => {
                 pets
             }
         })
-    } catch (err) {
-        res.status(404).json({
-            status: 'fail',
-            message: err.message
-        })
-    }
+})
 
-}
+exports.createNewPet = catchAsync(async (req, res , next) => {
 
-exports.createNewPet = async (req, res) => {
-    try {
-        const newPet = await Pet.create(req.body)
+    const newPet = await Pet.create(req.body)
 
-        res.status(201).json({
-            status: 'Success',
-            data: {
-                pet: newPet
-            }
-        })
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err.message
-        })
-    }
-}
+    res.status(201).json({
+        status: 'Success',
+        data: {
+            pet: newPet
+        }
+    })
 
-exports.editPet = async (req, res) => {
-    try {
-        const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        })
+})
 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                pet
-            }
-        })
+exports.editPet = catchAsync(async (req, res , next) => {
 
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
+    const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    })
 
-}
+    res.status(200).json({
+        status: 'success',
+        data: {
+            pet
+        }
+    })
+})
 
-exports.getPet = async (req, res) => {
-    try {
-        const pet = await Pet.findById(req.params.id)
+exports.getPet = catchAsync(async (req, res , next) => {
 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                pet
-            }
-        })
-    } catch (err) {
-        res.status(404).send({
-            status: 'fail',
-            message: err.message
-        })
-    }
+    const pet = await Pet.findById(req.params.id)
 
-}
+    res.status(200).json({
+        status: 'success',
+        data: {
+            pet
+        }
+    })
 
-exports.deletePet = async (req, res) => {
-    try {
-        const pet = await Pet.findByIdAndDelete(req.params.id)
 
-        res.status(200).json({
-            status: 'success',
-            message : "Pet Successfully Deleted",
-            data: {
-                pet
-            }
-        })
+})
 
-    } catch (err) {
-        res.status(400).json({
-            status: 'fail',
-            message: err
-        })
-    }
-}
+exports.deletePet = catchAsync(async (req, res , next) => {
+
+    const pet = await Pet.findByIdAndDelete(req.params.id)
+
+    res.status(200).json({
+        status: 'success',
+        message: "Pet Successfully Deleted",
+        data: {
+            pet
+        }
+    })
+
+})
