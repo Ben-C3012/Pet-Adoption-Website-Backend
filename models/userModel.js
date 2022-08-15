@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
             },
             message: 'Passwords Are Not The Same!'
         }
+    },
+
+    phoneNumber: {
+        type: String,
+        required: [true, 'please enter a phone number'],
+        validate: [validator.isMobilePhone, 'Plase Provide a valid phone number']
     }
 })
 
