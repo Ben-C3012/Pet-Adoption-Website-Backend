@@ -1,6 +1,6 @@
 const Pet = require('../models/petModel')
 const catchAsync = require('../utils/catchAsync')
-
+const AppError = require('../utils/appError')
 
 exports.getAllPets = catchAsync(async (req, res, next) => {
 
@@ -46,6 +46,10 @@ exports.editPet = catchAsync(async (req, res, next) => {
         runValidators: true
     })
 
+    if (!pet) {
+        return next(new AppError('No Pet Found With That ID', 404))
+    }
+
     res.status(200).json({
         status: 'success',
         data: {
@@ -58,19 +62,25 @@ exports.getPet = catchAsync(async (req, res, next) => {
 
     const pet = await Pet.findById(req.params.id)
 
+    if (!pet) {
+        return next(new AppError('No Pet Found With That ID', 404))
+    }
+
     res.status(200).json({
         status: 'success',
         data: {
             pet
         }
     })
-
-
 })
 
 exports.deletePet = catchAsync(async (req, res, next) => {
 
     const pet = await Pet.findByIdAndDelete(req.params.id)
+
+    if (!pet) {
+        return next(new AppError('No Pet Found With That ID', 404))
+    }
 
     res.status(200).json({
         status: 'success',
