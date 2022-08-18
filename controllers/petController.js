@@ -13,7 +13,7 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
 
     const query = Pet.find(queryObj)
 
-    // EXECUSE QUERY
+    // EXECUTE QUERY
     const pets = await query
 
 

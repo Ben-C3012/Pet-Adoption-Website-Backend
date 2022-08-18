@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorContoller')
@@ -13,6 +14,11 @@ const userRouter = require('./routes/userRoutes')
 
 // 1. MIDDLEWARES
 app.use(express.json())
+
+app.use(cors({
+    origin : '*',
+    allowedHeaders: 'Access-Control-Allow-Origin'
+}))
 
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString()
