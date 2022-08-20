@@ -40,7 +40,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'please enter a phone number'],
         validate: [validator.isMobilePhone, 'Plase Provide a valid phone number']
-    }
+    },
+
+    passwordChangedAt: Date
 })
 
 userSchema.pre('save', async function (next) {
@@ -59,6 +61,21 @@ userSchema.pre('save', async function (next) {
 userSchema.methods.correctPassword = async function (canidatePassword, userPassword) {
     return await bcrypt.compare(canidatePassword, userPassword)
 }
+
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+    if (this.passwordChangedAt) {
+        const changedTimestamp = parseInt(
+            this.passwordChangedAt.getTime() / 1000,
+            10
+        );
+        console.log(changedTimestamp)
+        return JWTTimestamp < changedTimestamp;
+    }
+
+    // False means NOT changed
+    return false;
+};
+
 
 const User = mongoose.model('User', userSchema)
 

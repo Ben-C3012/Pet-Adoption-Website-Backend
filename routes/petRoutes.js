@@ -1,6 +1,6 @@
 const express = require('express')
-const fs = require('fs')
 const petController = require('../controllers/petController')
+const authController = require('../controllers/authController')
 
 const router = express.Router()
 
@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.route('/')
     .get(petController.getAllPets)
-    .post(petController.createNewPet)
+    .post(authController.protect, petController.createNewPet)
 
 router.route('/:id')
     .get(petController.getPet)
