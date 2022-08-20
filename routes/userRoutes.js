@@ -13,7 +13,8 @@ router.post('/login', authController.login)
 router.post('/forgotPassword', authController.forgotPassword)
 // router.post('/resetPassword', authController.resetPassword)
 
-router.patch('/updateMyPassword' , authController.protect , authController.updatePassword)
+router.patch('/updateMyPassword', authController.protect, authController.updatePassword)
+router.patch('/updateMe', authController.protect, userController.updateMe)
 
 router.route('/')
     .get(authController.protect,
