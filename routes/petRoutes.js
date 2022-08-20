@@ -13,6 +13,6 @@ router.route('/')
 router.route('/:id')
     .get(petController.getPet)
     .patch(petController.editPet)
-    .delete(petController.deletePet)
+    .delete(authController.protect, authController.restrictTo('admin'), petController.deletePet)
 
 module.exports = router

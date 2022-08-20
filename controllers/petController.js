@@ -82,12 +82,11 @@ exports.deletePet = catchAsync(async (req, res, next) => {
         return next(new AppError('No Pet Found With That ID', 404))
     }
 
-    res.status(200).json({
+    res.status(204).json({
         status: 'success',
         message: "Pet Successfully Deleted",
-        data: {
-            pet
-        }
+        data: null
+        
     })
 
 })
