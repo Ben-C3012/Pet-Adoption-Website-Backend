@@ -42,7 +42,7 @@ const petSchema = new mongoose.Schema({
     },
     breed: {
         type: String,
-        // required: [true, 'A Dog Must Have a breed'],
+        required: [true, 'A Dog Must Have a breed'],
     },
 
     photo: {

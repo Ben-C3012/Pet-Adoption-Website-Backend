@@ -7,11 +7,12 @@ const router = express.Router()
 
 router.route('/')
     .get(petController.getAllPets)
-    .post(authController.protect, petController.uploadPetPhoto , petController.createNewPet)
+    .post(authController.protect, authController.restrictTo('admin'), petController.uploadPetPhoto, petController.createNewPet)
 
 router.route('/:id')
     .get(petController.getPet)
-    .patch(petController.editPet)
+    .patch(authController.protect, authController.restrictTo('admin'), petController.uploadPetPhoto, petController.editPet)
     .delete(authController.protect, authController.restrictTo('admin'), petController.deletePet)
+
 
 module.exports = router

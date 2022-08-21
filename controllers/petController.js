@@ -38,8 +38,6 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
     const exludedFields = ['page', 'sort', 'limit', 'fields']
     exludedFields.forEach(el => delete queryObj[el])
 
-    console.log(req.query, queryObj)
-
     const query = Pet.find(queryObj)
 
     // EXECUTE QUERY
@@ -56,10 +54,8 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
 })
 
 exports.createNewPet = catchAsync(async (req, res, next) => {
-    console.log(req.file)
-    console.log(req.body)
 
-    if(req.file) req.body.photo = req.file.filename
+    if (req.file) req.body.photo = req.file.filename
 
     const newPet = await Pet.create(req.body)
 
@@ -74,10 +70,15 @@ exports.createNewPet = catchAsync(async (req, res, next) => {
 
 exports.editPet = catchAsync(async (req, res, next) => {
 
+   
+    if (req.file) req.body.photo = req.file.filename
+    console.log(req.body.photo)
+
     const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
     })
+
 
     if (!pet) {
         return next(new AppError('No Pet Found With That ID', 404))
@@ -123,3 +124,5 @@ exports.deletePet = catchAsync(async (req, res, next) => {
     })
 
 })
+
+
