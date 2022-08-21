@@ -18,8 +18,6 @@ const userSchema = new mongoose.Schema({
         validate: [validator.isEmail, 'Plase Provide a valid email']
     },
 
-    photo: String,
-
     password: {
         type: String,
         required: [true, 'please enter a valid password'],
@@ -52,7 +50,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['user', 'admin'],
         default: 'user'
-    }
+    },
+
+    photo: {
+        type: String, 
+        default: 'default.jpeg'
+    },
 })
 
 userSchema.pre('save', async function (next) {

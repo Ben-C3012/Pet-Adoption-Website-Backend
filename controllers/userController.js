@@ -1,6 +1,35 @@
 const catchAsync = require('../utils/catchAsync')
 const User = require('../models/userModel')
 const AppError = require('../utils/appError')
+const multer = require('multer')
+
+const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/img/users')
+    },
+
+    filename: (req, file, cb) => {
+        const ext = file.mimetype.split('/')[1]
+        cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
+    }
+})
+
+
+const multerFilter = (req , file , cb) => {
+    if(file.mimetype.startsWith('image')) {
+        cb(null , true)
+    } else {
+        cb(  new AppError('Not an Image, Please Upload only images' , 400) , false)
+    }
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+})
+
+
+exports.uploadUserPhoto = upload.single('photo')
 
 
 const filterObj = (obj, ...allowedFields) => {
@@ -12,13 +41,6 @@ const filterObj = (obj, ...allowedFields) => {
     return newObj
 }
 
-const getEmail = (objUser) => {
-    if (objUser == undefined) {
-        return
-    }
-    const { email } = objUser
-    return email
-}
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
     const users = await User.find()
@@ -35,6 +57,9 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 })
 
 exports.updateMe = catchAsync(async (req, res, next) => {
+    console.log(req.file)
+    console.log(req.body)
+
     // 1) Create an error  if user posts password data
     if (req.body.password || req.body.passwordConfirm) {
         return next(
@@ -43,19 +68,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
             , 400)
     }
 
-    const currentUser = await User.find({ email: req.body.email })
-
-
-    const currentEmail = getEmail(...currentUser)
-
-    if (currentEmail === req.body.email) {
-        next(new AppError('Email is already in use'))
-    }
-
-
-
     // 2) Filtered out unwanted fields names that are not allowed to be updated
     const filteredBody = filterObj(req.body, 'name', 'email', 'phoneNumber')
+    if(req.file) filteredBody.photo = req.file.filename
 
     // 3) Update the user document
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
