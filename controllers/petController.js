@@ -1,6 +1,35 @@
 const Pet = require('../models/petModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
+const multer = require('multer')
+
+const multerStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/img/pets')
+    },
+
+    filename: (req, file, cb) => {
+        const ext = file.mimetype.split('/')[1]
+        cb(null, `pet-${req.user.id}-${Date.now()}.${ext}`)
+    }
+})
+
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true)
+    } else {
+        cb(new AppError('Not an Image, Please Upload only images', 400), false)
+    }
+}
+
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter
+})
+
+exports.uploadPetPhoto = upload.single('photo')
+
 
 exports.getAllPets = catchAsync(async (req, res, next) => {
 
@@ -27,6 +56,10 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
 })
 
 exports.createNewPet = catchAsync(async (req, res, next) => {
+    console.log(req.file)
+    console.log(req.body)
+
+    if(req.file) req.body.photo = req.file.filename
 
     const newPet = await Pet.create(req.body)
 
@@ -86,7 +119,7 @@ exports.deletePet = catchAsync(async (req, res, next) => {
         status: 'success',
         message: "Pet Successfully Deleted",
         data: null
-        
+
     })
 
 })

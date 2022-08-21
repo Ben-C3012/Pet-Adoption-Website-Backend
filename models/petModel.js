@@ -14,10 +14,7 @@ const petSchema = new mongoose.Schema({
         type: String,
         required: [true, 'A Dog Must Have a adoptionStatus'],
     },
-    picture: {
-        type: String,
-        required: [true, 'A Dog Must have a Cover image ']
-    },
+
     height: {
         type: Number,
         required: [true, 'A Dog Must Have a height'],
@@ -45,8 +42,15 @@ const petSchema = new mongoose.Schema({
     },
     breed: {
         type: String,
-        required: [true, 'A Dog Must Have a breed'],
-    }
+        // required: [true, 'A Dog Must Have a breed'],
+    },
+
+    photo: {
+        type: String,
+        required: [true, 'A Dog Must have a Cover Photo ']
+        
+    },
+
 })
 
 const Pet = mongoose.model('Pet', petSchema)

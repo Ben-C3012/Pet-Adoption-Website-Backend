@@ -4,11 +4,10 @@ const authController = require('../controllers/authController')
 
 const router = express.Router()
 
-// router.param('id', petController.checkID)
 
 router.route('/')
     .get(petController.getAllPets)
-    .post(authController.protect, petController.createNewPet)
+    .post(authController.protect, petController.uploadPetPhoto , petController.createNewPet)
 
 router.route('/:id')
     .get(petController.getPet)
