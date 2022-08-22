@@ -53,9 +53,14 @@ const userSchema = new mongoose.Schema({
     },
 
     photo: {
-        type: String, 
+        type: String,
         default: 'https://res.cloudinary.com/pet-adoption-bc/image/upload/v1661176207/default_bsnvft.jpg'
     },
+
+    savedPets: {
+        type: Array,
+        default: Array
+    }
 })
 
 userSchema.pre('save', async function (next) {
@@ -83,7 +88,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
             this.passwordChangedAt.getTime() / 1000,
             10
         );
-       
+
         return JWTTimestamp < changedTimestamp;
     }
 

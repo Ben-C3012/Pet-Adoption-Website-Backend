@@ -12,10 +12,14 @@ router.route('/')
 
 
 
-router.route('/:id').get(petController.getPet)
-
+router.route('/:id')
+    .get(petController.getPet)
     .patch(authController.protect, authController.restrictTo('admin'), petController.uploadPetPhoto, petController.editPet)
     .delete(authController.protect, authController.restrictTo('admin'), petController.deletePet)
+
+
+router.route('/:id/save')
+    .put(authController.protect, petController.savePet)
 
 
 module.exports = router

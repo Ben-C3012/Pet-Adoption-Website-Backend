@@ -1,4 +1,5 @@
 const Pet = require('../models/petModel')
+const User = require('../models/userModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const multer = require('multer')
@@ -153,4 +154,27 @@ exports.deletePet = catchAsync(async (req, res, next) => {
 
 })
 
+
+
+exports.savePet = catchAsync(async (req, res, next) => {
+
+    const petToSave = await Pet.findById(req.params.id)
+    const currentUser = req.user
+
+    const updatedUser = await User.findByIdAndUpdate(
+        { _id: currentUser._id },
+        {
+            $addToSet: {
+                savedPets: petToSave
+            }
+        })
+
+
+    res.status(200).json({
+        status: 'Success',
+        savedPets: updatedUser.savedPets
+
+    })
+
+})
 
