@@ -5,7 +5,7 @@ const multer = require('multer')
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/img/pets')
+        cb(null, 'public/pets')
     },
 
     filename: (req, file, cb) => {
@@ -70,7 +70,7 @@ exports.createNewPet = catchAsync(async (req, res, next) => {
 
 exports.editPet = catchAsync(async (req, res, next) => {
 
-   
+
     if (req.file) req.body.photo = req.file.filename
     console.log(req.body.photo)
 

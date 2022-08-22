@@ -14,10 +14,10 @@ const userRouter = require('./routes/userRoutes')
 
 // 1. MIDDLEWARES
 app.use(express.json())
-app.use(express.static('public'))
+app.use('/public/pets', express.static('public/pets'))
 
 app.use(cors({
-    origin : '*',
+    origin: '*',
     allowedHeaders: 'Access-Control-Allow-Origin'
 }))
 
