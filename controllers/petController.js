@@ -159,6 +159,7 @@ exports.deletePet = catchAsync(async (req, res, next) => {
 exports.savePet = catchAsync(async (req, res, next) => {
 
     const petToSave = await Pet.findById(req.params.id)
+
     const currentUser = req.user
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -178,3 +179,25 @@ exports.savePet = catchAsync(async (req, res, next) => {
 
 })
 
+
+exports.deleteSavedPet = catchAsync(async (req, res, next) => {
+
+    const petToRemove = await Pet.findById(req.params.id)
+
+    const currentUser = req.user
+
+    await User.findByIdAndUpdate(
+        { _id: currentUser._id },
+        {
+            $pull: {
+                savedPets: petToRemove
+            }
+        })
+
+    res.status(204).json({
+        status: 'Success',
+
+    })
+
+
+})

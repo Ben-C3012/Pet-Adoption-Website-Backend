@@ -20,6 +20,7 @@ router.route('/:id')
 
 router.route('/:id/save')
     .put(authController.protect, petController.savePet)
+    .delete(authController.protect, petController.deleteSavedPet)
 
 
 module.exports = router
