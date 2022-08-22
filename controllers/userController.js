@@ -3,6 +3,7 @@ const User = require('../models/userModel')
 const AppError = require('../utils/appError')
 const multer = require('multer')
 
+
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/users')
@@ -30,6 +31,11 @@ const upload = multer({
 
 
 exports.uploadUserPhoto = upload.single('photo')
+
+
+const uploadToCloudinary = async(req , res , next) => {
+      
+}
 
 
 const filterObj = (obj, ...allowedFields) => {

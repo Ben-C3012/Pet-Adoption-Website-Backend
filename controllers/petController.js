@@ -2,7 +2,11 @@ const Pet = require('../models/petModel')
 const catchAsync = require('../utils/catchAsync')
 const AppError = require('../utils/appError')
 const multer = require('multer')
+const fs = require('fs')
 
+const cloudinary = require('../utils/cloudinary')
+
+// Multer
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/pets')
@@ -30,6 +34,30 @@ const upload = multer({
 
 exports.uploadPetPhoto = upload.single('photo')
 
+////////////////////
+
+// Cloudinary
+exports.uploadToCloudinary = async (req, res, next) => {
+
+    cloudinary.uploader.upload(req.file.path, (error, result) => {
+        if (error) {
+            res.status(500).send(error);
+            return;
+        }
+        if (result) {
+            fs.unlinkSync(req.file.path);
+            req.body.photo = result.secure_url
+
+            console.log(req.body)
+
+
+        }
+    });
+
+    next()
+
+}
+
 
 exports.getAllPets = catchAsync(async (req, res, next) => {
 
@@ -55,8 +83,8 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
 
 exports.createNewPet = catchAsync(async (req, res, next) => {
 
-    if (req.file) req.body.photo = req.file.filename
-
+    // if (req.file) req.body.photo = req.file.filename
+    console.log(req.body)
     const newPet = await Pet.create(req.body)
 
     res.status(201).json({

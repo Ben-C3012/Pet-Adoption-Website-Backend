@@ -47,10 +47,8 @@ const petSchema = new mongoose.Schema({
 
     photo: {
         type: String,
-        required: [true, 'A Dog Must have a Cover Photo ']
-        
-    },
-
+        // required: [true, 'A Dog Must have a Cover Photo ']
+    } 
 })
 
 const Pet = mongoose.model('Pet', petSchema)
