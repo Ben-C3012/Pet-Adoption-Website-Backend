@@ -15,6 +15,7 @@ const userRouter = require('./routes/userRoutes')
 // 1. MIDDLEWARES
 app.use(express.json())
 app.use('/public/pets', express.static('public/pets'))
+app.use('/public/users', express.static('public/users'))
 
 app.use(cors({
     origin: '*',

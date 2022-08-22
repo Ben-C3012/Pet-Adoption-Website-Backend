@@ -5,7 +5,7 @@ const multer = require('multer')
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/img/users')
+        cb(null, 'public/users')
     },
 
     filename: (req, file, cb) => {
@@ -15,11 +15,11 @@ const multerStorage = multer.diskStorage({
 })
 
 
-const multerFilter = (req , file , cb) => {
-    if(file.mimetype.startsWith('image')) {
-        cb(null , true)
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true)
     } else {
-        cb(  new AppError('Not an Image, Please Upload only images' , 400) , false)
+        cb(new AppError('Not an Image, Please Upload only images', 400), false)
     }
 }
 
@@ -70,7 +70,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
     // 2) Filtered out unwanted fields names that are not allowed to be updated
     const filteredBody = filterObj(req.body, 'name', 'email', 'phoneNumber')
-    if(req.file) filteredBody.photo = req.file.filename
+    if (req.file) filteredBody.photo = req.file.filename
 
     // 3) Update the user document
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
