@@ -2,6 +2,8 @@ const catchAsync = require('../utils/catchAsync')
 const User = require('../models/userModel')
 const AppError = require('../utils/appError')
 const multer = require('multer')
+const Pet = require('../models/petModel')
+const { clearCache } = require('ejs')
 
 
 const multerStorage = multer.diskStorage({
@@ -33,8 +35,8 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single('photo')
 
 
-const uploadToCloudinary = async(req , res , next) => {
-      
+const uploadToCloudinary = async (req, res, next) => {
+
 }
 
 
@@ -131,3 +133,35 @@ exports.deleteUser = (req, res, next) => {
         message: 'This route is not yet defined'
     })
 }
+
+
+exports.adoptPet = catchAsync(async (req, res, next) => {
+
+    const currentUser = req.user
+    const petToAdopt = await Pet.findById(req.params.id)
+
+    // Change Adoption Status of the pet
+    const pet = await Pet.findByIdAndUpdate(
+        { _id: petToAdopt._id },
+        { adoptionStatus: 'Adopted' },
+        { new: true, runValidators: true }
+
+    )
+
+ 
+    // Add desired Pet to the users Pets
+    const updatedUser = await User.findByIdAndUpdate(
+        { _id: currentUser._id },
+        {
+            $addToSet: {
+                currentPets: pet
+            }
+        }, { new: true, runValidators: true })
+
+
+    res.status(200).json({
+        status: 'Success',
+        pet
+    })
+
+})

@@ -47,10 +47,9 @@ exports.uploadToCloudinary = async (req, res, next) => {
         }
         if (result) {
             fs.unlinkSync(req.file.path);
+
             req.body.photo = result.secure_url
-
-            console.log(req.body)
-
+            res.locals.name = 'Gourav';
 
         }
     });
@@ -84,8 +83,11 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
 
 exports.createNewPet = catchAsync(async (req, res, next) => {
 
-    // if (req.file) req.body.photo = req.file.filename
-    console.log(req.body)
+    // console.log(req.body)
+    if (req.file) req.body.photo = req.file.filename
+
+    console.log(res.locals.name)
+
     const newPet = await Pet.create(req.body)
 
     res.status(201).json({
@@ -100,7 +102,7 @@ exports.createNewPet = catchAsync(async (req, res, next) => {
 exports.editPet = catchAsync(async (req, res, next) => {
 
 
-    if (req.file) req.body.photo = req.file.filename
+    // if (req.file) req.body.photo = req.file.filename
     console.log(req.body.photo)
 
     const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
@@ -186,13 +188,17 @@ exports.deleteSavedPet = catchAsync(async (req, res, next) => {
 
     const currentUser = req.user
 
+
     await User.findByIdAndUpdate(
         { _id: currentUser._id },
         {
             $pull: {
                 savedPets: petToRemove
-            }
-        })
+            },
+
+        }, { new: true, runValidators: true })
+
+
 
     res.status(204).json({
         status: 'Success',

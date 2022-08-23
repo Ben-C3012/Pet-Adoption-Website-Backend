@@ -60,6 +60,11 @@ const userSchema = new mongoose.Schema({
     savedPets: {
         type: Array,
         default: Array
+    },
+
+    currentPets: {
+        type: Array,
+        default: Array
     }
 })
 
