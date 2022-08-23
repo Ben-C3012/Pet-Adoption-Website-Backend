@@ -30,8 +30,6 @@ router.route('/:id')
     .patch(userController.updateUser)
     .delete(userController.deleteUser)
 
-router.route('/:id/adopt')
-    .patch(authController.protect, userController.adoptPet)
 
 
 module.exports = router

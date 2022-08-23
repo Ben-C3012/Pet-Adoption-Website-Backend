@@ -51,7 +51,7 @@ exports.uploadToCloudinary = async (req, res, next) => {
             req.body.photo = result.url
             console.log(req.body)
 
-//  Create The Pet
+            //  Create The Pet
             const newPet = await Pet.create(req.body)
 
             res.status(201).json({
@@ -88,24 +88,6 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
     })
 })
 
-// exports.createNewPet = catchAsync(async (req, res, next) => {
-
-//     // console.log(req.body)
-//     // if (req.file) req.body.photo = req.file.filename
-//     // if (req.file) req.body.photo = req.body.photo 
-
-
-
-//     const newPet = await Pet.create(req.body)
-
-//     res.status(201).json({
-//         status: 'Success',
-//         data: {
-//             pet: newPet
-//         }
-//     })
-
-// })
 
 exports.editPet = catchAsync(async (req, res, next) => {
 
@@ -178,7 +160,7 @@ exports.savePet = catchAsync(async (req, res, next) => {
             $addToSet: {
                 savedPets: petToSave
             }
-        })
+        }, { new: true, runValidators: true })
 
 
     res.status(200).json({
@@ -213,5 +195,40 @@ exports.deleteSavedPet = catchAsync(async (req, res, next) => {
 
     })
 
+
+})
+
+
+exports.adoptPet = catchAsync(async (req, res, next) => {
+
+    console.log(req.body)
+
+    const currentUser = req.user
+    const petToAdopt = await Pet.findById(req.params.id)
+
+    // Change Adoption Status of the pet
+    const pet = await Pet.findByIdAndUpdate(
+        { _id: petToAdopt._id },
+        { adoptionStatus: req.body?.foster ? 'Fostered' : 'Adopted' },
+        { new: true, runValidators: true }
+
+    )
+
+
+    // Add desired Pet to the users Pets
+    const updatedUser = await User.findByIdAndUpdate(
+        { _id: currentUser._id },
+        {
+            $addToSet: {
+                currentPets: pet
+            }
+        }, { new: true, runValidators: true })
+
+
+    res.status(200).json({
+        status: 'Success',
+        pet,
+        updatedUser
+    })
 
 })

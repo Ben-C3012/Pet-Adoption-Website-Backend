@@ -135,33 +135,3 @@ exports.deleteUser = (req, res, next) => {
 }
 
 
-exports.adoptPet = catchAsync(async (req, res, next) => {
-
-    const currentUser = req.user
-    const petToAdopt = await Pet.findById(req.params.id)
-
-    // Change Adoption Status of the pet
-    const pet = await Pet.findByIdAndUpdate(
-        { _id: petToAdopt._id },
-        { adoptionStatus: 'Adopted' },
-        { new: true, runValidators: true }
-
-    )
-
- 
-    // Add desired Pet to the users Pets
-    const updatedUser = await User.findByIdAndUpdate(
-        { _id: currentUser._id },
-        {
-            $addToSet: {
-                currentPets: pet
-            }
-        }, { new: true, runValidators: true })
-
-
-    res.status(200).json({
-        status: 'Success',
-        pet
-    })
-
-})
