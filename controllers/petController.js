@@ -230,5 +230,19 @@ exports.adoptPet = catchAsync(async (req, res, next) => {
         pet,
         updatedUser
     })
+})
+
+exports.getUserPets = catchAsync(async (req, res, next) => {
+
+    console.log(req.user.savedPets)
+
+    res.status(200).json({
+        status: 'Success',
+        user: req.user.name,
+        savedPets: req.user.savedPets,
+        currentPets: req.user.currentPets
+
+    })
+
 
 })

@@ -28,6 +28,9 @@ router.route('/:id/save')
 router.route('/:id/adopt')
     .patch(authController.protect, petController.adoptPet)
 
+router.route('/user/:id')
+    .get(authController.protect, petController.getUserPets)
+
 
 
 module.exports = router

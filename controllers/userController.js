@@ -3,7 +3,7 @@ const User = require('../models/userModel')
 const AppError = require('../utils/appError')
 const multer = require('multer')
 const Pet = require('../models/petModel')
-const { clearCache } = require('ejs')
+
 
 
 const multerStorage = multer.diskStorage({
@@ -93,8 +93,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
             user: updatedUser
         }
     })
-
-    // 3) 
 })
 
 exports.createUser = async (req, res, next) => {
@@ -102,7 +100,6 @@ exports.createUser = async (req, res, next) => {
         status: 'error',
         message: 'This route is not yet defined'
     })
-
 }
 
 exports.getUser = catchAsync(async (req, res, next) => {
@@ -133,5 +130,4 @@ exports.deleteUser = (req, res, next) => {
         message: 'This route is not yet defined'
     })
 }
-
 
