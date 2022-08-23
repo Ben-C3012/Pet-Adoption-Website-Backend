@@ -234,14 +234,44 @@ exports.adoptPet = catchAsync(async (req, res, next) => {
 
 exports.getUserPets = catchAsync(async (req, res, next) => {
 
-    console.log(req.user.savedPets)
-
     res.status(200).json({
         status: 'Success',
         user: req.user.name,
         savedPets: req.user.savedPets,
         currentPets: req.user.currentPets
+    })
+})
 
+exports.returnPet = catchAsync(async (req, res, next) => { 
+
+    const petToReturn = await Pet.findById(req.params.id)
+
+    console.log(req.user)
+
+
+    // Change Adoption Status of the pet
+    const pet = await Pet.findByIdAndUpdate(
+        { _id: petToReturn._id },
+        { adoptionStatus: 'Available' },
+        { new: true, runValidators: true }
+    )
+
+    const currentUser = req.user
+
+    // Remove The pet from the users pets
+    await User.findByIdAndUpdate(
+        { _id: currentUser._id },
+        {
+            $pull: {
+                currentPets: petToReturn
+            },
+
+        }, { new: true, runValidators: true })
+
+
+
+    res.status(204).json({
+        status: 'Success',
     })
 
 

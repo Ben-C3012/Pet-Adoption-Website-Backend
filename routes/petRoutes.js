@@ -31,6 +31,9 @@ router.route('/:id/adopt')
 router.route('/user/:id')
     .get(authController.protect, petController.getUserPets)
 
+router.route('/return/:id')
+         .post(authController.protect , petController.returnPet)
+
 
 
 module.exports = router
