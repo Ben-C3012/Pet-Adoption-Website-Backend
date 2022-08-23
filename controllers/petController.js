@@ -40,7 +40,7 @@ exports.uploadPetPhoto = upload.single('photo')
 // Cloudinary
 exports.uploadToCloudinary = async (req, res, next) => {
 
-    cloudinary.uploader.upload(req.file.path, (error, result) => {
+    cloudinary.uploader.upload(req.file.path, async (error, result) => {
         if (error) {
             res.status(500).send(error);
             return;
@@ -48,14 +48,21 @@ exports.uploadToCloudinary = async (req, res, next) => {
         if (result) {
             fs.unlinkSync(req.file.path);
 
-            req.body.photo = result.secure_url
-            res.locals.name = 'Gourav';
+            req.body.photo = result.url
+            console.log(req.body)
 
+//  Create The Pet
+            const newPet = await Pet.create(req.body)
+
+            res.status(201).json({
+                status: 'Success',
+                data: {
+                    pet: newPet
+                }
+            })
         }
+
     });
-
-    next()
-
 }
 
 
@@ -81,23 +88,24 @@ exports.getAllPets = catchAsync(async (req, res, next) => {
     })
 })
 
-exports.createNewPet = catchAsync(async (req, res, next) => {
+// exports.createNewPet = catchAsync(async (req, res, next) => {
 
-    // console.log(req.body)
-    if (req.file) req.body.photo = req.file.filename
+//     // console.log(req.body)
+//     // if (req.file) req.body.photo = req.file.filename
+//     // if (req.file) req.body.photo = req.body.photo 
 
-    console.log(res.locals.name)
 
-    const newPet = await Pet.create(req.body)
 
-    res.status(201).json({
-        status: 'Success',
-        data: {
-            pet: newPet
-        }
-    })
+//     const newPet = await Pet.create(req.body)
 
-})
+//     res.status(201).json({
+//         status: 'Success',
+//         data: {
+//             pet: newPet
+//         }
+//     })
+
+// })
 
 exports.editPet = catchAsync(async (req, res, next) => {
 

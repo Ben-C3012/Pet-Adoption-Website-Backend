@@ -7,7 +7,10 @@ const router = express.Router()
 
 router.route('/')
     .get(petController.getAllPets)
-    .post(authController.protect, authController.restrictTo('admin'), petController.uploadPetPhoto, petController.uploadToCloudinary, petController.createNewPet)
+    .post(authController.protect,
+        authController.restrictTo('admin'),
+        petController.uploadPetPhoto,
+        petController.uploadToCloudinary)
 
 
 
