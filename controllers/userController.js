@@ -3,7 +3,9 @@ const User = require('../models/userModel')
 const AppError = require('../utils/appError')
 const multer = require('multer')
 const Pet = require('../models/petModel')
+const fs = require('fs')
 
+const cloudinary = require('../utils/cloudinary')
 
 
 const multerStorage = multer.diskStorage({
@@ -35,7 +37,33 @@ const upload = multer({
 exports.uploadUserPhoto = upload.single('photo')
 
 
-const uploadToCloudinary = async (req, res, next) => {
+// Cloudinary
+exports.uploadToCloudinary = async (req, res, next) => {
+
+    cloudinary.uploader.upload(req.file.path, async (error, result) => {
+        if (error) {
+            res.status(500).send(error);
+            return;
+        }
+        if (result) {
+            fs.unlinkSync(req.file.path);
+            req.body.photo = result.url
+            console.log(req.body)
+
+            //  Update the user document
+            const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body.photo, {
+                new: true,
+                runValidators: true
+            })
+
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    user: updatedUser
+                }
+            })
+        }
+    });
 
 }
 
@@ -65,7 +93,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 })
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-    console.log(req.file)
+    // console.log(req.file)
     console.log(req.body)
 
     // 1) Create an error  if user posts password data
@@ -77,8 +105,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     }
 
     // 2) Filtered out unwanted fields names that are not allowed to be updated
-    const filteredBody = filterObj(req.body, 'name', 'email', 'phoneNumber')
-    if (req.file) filteredBody.photo = req.file.filename
+    const filteredBody = filterObj(req.body, 'name', 'email', 'phoneNumber', 'photo')
+    // if (req.file) filteredBody.photo = req.file.filename
 
     // 3) Update the user document
     const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {

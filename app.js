@@ -1,7 +1,12 @@
 const express = require('express')
 const app = express()
+
 const morgan = require('morgan')
 const cors = require('cors')
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser())
+
 
 const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorContoller')
@@ -17,10 +22,7 @@ app.use(express.json())
 app.use('/public/pets', express.static('public/pets'))
 app.use('/public/users', express.static('public/users'))
 
-app.use(cors({
-    origin: '*',
-    allowedHeaders: 'Access-Control-Allow-Origin'
-}))
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }))
 
 app.use((req, res, next) => {
     req.requestTime = new Date().toISOString()

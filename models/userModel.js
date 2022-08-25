@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema({
 
     photo: {
         type: String,
-        default: 'https://res.cloudinary.com/pet-adoption-bc/image/upload/v1661176207/default_bsnvft.jpg'
+        default: 'https://res.cloudinary.com/pet-adoption-bc/image/upload/v1661269709/default_enfcpi.jpg'
     },
 
     savedPets: {
