@@ -51,7 +51,7 @@ exports.uploadToCloudinary = async (req, res, next) => {
             console.log(req.body)
 
             //  Update the user document
-            const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body.photo, {
+            const updatedUser = await User.findByIdAndUpdate(req.user.id, req.body, {
                 new: true,
                 runValidators: true
             })

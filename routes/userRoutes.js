@@ -8,10 +8,11 @@ const router = express.Router()
 router.post('/signup', authController.signup)
 
 router.post('/login', authController.login)
-.get(authController.logout)
+    .get(authController.logout)
 
-router.get('/logout' , authController.logout) 
+router.get('/logout', authController.logout)
 
+router.post('/isloggedin', authController.isLoggeedIn)
 
 router.post('/forgotPassword', authController.forgotPassword)
 // router.post('/resetPassword', authController.resetPassword)
@@ -20,7 +21,7 @@ router.patch('/updateMyPassword', authController.protect, authController.updateP
 
 router.patch('/updateMe',
     authController.protect,
-    userController.uploadUserPhoto, 
+    userController.uploadUserPhoto,
     // userController.uploadToCloudinary,
     userController.updateMe
 )

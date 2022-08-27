@@ -84,6 +84,9 @@ exports.protect = catchAsync(async (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         token = req.headers.authorization.split(' ')[1];
+
+    } else if (req.cookies.jwt) {
+        token = req.cookies.jwt
     }
 
     if (!token) {
@@ -93,8 +96,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     }
 
-
-    // 2) Verification token
+    // 2) Verification token - comparing current token with secret
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
 
@@ -114,6 +116,47 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     next()
 })
+
+// Only For rendered pages
+exports.isLoggeedIn = catchAsync(async (req, res, next) => {
+
+    if (req.cookies.jwt) {
+
+        // 1) Verification token - comparing current token with secret
+        const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
+
+
+        // 2) Check if user still exits
+        const currentUser = await User.findById(decoded.id)
+        if (!currentUser) {
+            return next()
+        }
+
+        // 3) Check if user changed passwords after the JWT was issued 
+        if (currentUser.changedPasswordAfter(decoded.iat)) {
+            return next(new AppError('User Recently changed passwords! please log in again', 401))
+        }
+
+        // There is a loggedin user
+
+        req.user = currentUser
+
+    }
+
+    if (!req.cookies.jwt) {
+        return res.status(401).json({
+            status: 'failed',
+        })
+    }
+
+    return res.status(200).json({
+        status: 'Success',
+        user: req.user
+    })
+
+
+})
+
 
 exports.restrictTo = (...roles) => {
     return (req, res, next) => {
