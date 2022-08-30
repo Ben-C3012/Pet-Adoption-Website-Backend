@@ -12,12 +12,16 @@ router.route('/')
         petController.uploadPetPhoto,
         petController.uploadToCloudinary)
 
-
+// Update Pet Photo
+router.route('/:id/photo')
+    .patch(authController.protect, petController.uploadPetPhoto, petController.uploadToCloudinaryPet)
 
 
 router.route('/:id')
     .get(petController.getPet)
     .patch(authController.protect, authController.restrictTo('admin'), petController.uploadPetPhoto, petController.editPet)
+
+
     .delete(authController.protect, authController.restrictTo('admin'), petController.deletePet)
 
 
@@ -32,7 +36,7 @@ router.route('/user/:id')
     .get(authController.protect, petController.getUserPets)
 
 router.route('/return/:id')
-         .post(authController.protect , petController.returnPet)
+    .post(authController.protect, petController.returnPet)
 
 
 

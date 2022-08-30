@@ -37,7 +37,7 @@ const petSchema = new mongoose.Schema({
 
     },
     dietaryRestrictions: {
-        type: Boolean,
+        type: String,
         required: [true, 'A Dog Must Have a dietaryRestrictions description'],
     },
     breed: {

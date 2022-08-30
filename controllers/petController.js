@@ -38,9 +38,9 @@ exports.uploadPetPhoto = upload.single('photo')
 ////////////////////
 
 // Cloudinary
-exports.uploadToCloudinary = async (req, res, next) => {
+exports.uploadToCloudinary = catchAsync(async (req, res, next) => {
 
-    cloudinary.uploader.upload(req.file.path, async (error, result) => {
+    cloudinary.uploader.upload(req.file.path, catchAsync(async (error, result) => {
         if (error) {
             res.status(500).send(error);
             return;
@@ -61,9 +61,43 @@ exports.uploadToCloudinary = async (req, res, next) => {
                 }
             })
         }
+    }))
+})
 
-    });
-}
+// Cloudinary
+exports.uploadToCloudinaryPet = catchAsync(async (req, res, next) => {
+
+    cloudinary.uploader.upload(req.file.path, catchAsync(async (error, result) => {
+        if (error) {
+            res.status(500).send(error);
+            return;
+        }
+        if (result) {
+            fs.unlinkSync(req.file.path);
+
+            req.body.photo = result.url
+            console.log(req.body)
+            const { id } = req.params
+
+            //  Update the user document
+            const updatedPet = await Pet.findByIdAndUpdate(id, req.body, {
+                new: true,
+                runValidators: true
+            })
+
+            res.status(200).json({
+                status: 'success',
+                data: {
+                    user: updatedPet
+                }
+            })
+
+        }
+
+
+    }))
+})
+
 
 
 exports.getAllPets = catchAsync(async (req, res, next) => {
@@ -97,7 +131,7 @@ exports.editPet = catchAsync(async (req, res, next) => {
 
     const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
-        runValidators: true
+        // runValidators: true
     })
 
 
@@ -194,8 +228,6 @@ exports.deleteSavedPet = catchAsync(async (req, res, next) => {
         status: 'Success',
 
     })
-
-
 })
 
 
@@ -242,7 +274,7 @@ exports.getUserPets = catchAsync(async (req, res, next) => {
     })
 })
 
-exports.returnPet = catchAsync(async (req, res, next) => { 
+exports.returnPet = catchAsync(async (req, res, next) => {
 
     const petToReturn = await Pet.findById(req.params.id)
 
