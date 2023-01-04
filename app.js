@@ -14,7 +14,7 @@ const petRouter = require('./routes/petRoutes')
 const userRouter = require('./routes/userRoutes')
 
 
-// 1. MIDDLEWARES
+// 1. MIDDLEWARE
 app.use(express.json())
 app.use(cookieParser())
 
