@@ -65,7 +65,7 @@ exports.login = catchAsync(async (req, res, next) => {
         return next(new AppError('Incorrect email or password', 401))
     }
 
-    // 3) if everyrhing is ok send a token. 
+    // 3) if everything is ok send a token. 
     createSendToken(user, 200, res)
 })
 
@@ -111,7 +111,7 @@ exports.protect = catchAsync(async (req, res, next) => {
         return next(new AppError('User Recently changed passwords! please log in again', 401))
     }
 
-    // GRANT ACESSS TO PROTECTED ROUTE
+    // GRANT ACCESS TO PROTECTED ROUTE
     req.user = currentUser
 
     next()
@@ -137,7 +137,7 @@ exports.isLoggeedIn = catchAsync(async (req, res, next) => {
             return next(new AppError('User Recently changed passwords! please log in again', 401))
         }
 
-        // There is a loggedin user
+        // There is a logged in  user
 
         req.user = currentUser
 
